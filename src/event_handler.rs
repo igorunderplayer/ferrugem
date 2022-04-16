@@ -15,6 +15,7 @@ impl EventHandler for Handler {
     }
 
     async fn message (&self, ctx: Context, message: Message) {
+        if message.author.bot { return; }
         if message.content == "sexo!" {
             message.channel_id.say(&ctx.http, "eca sexo").await.expect("Failed to send message");
         }
