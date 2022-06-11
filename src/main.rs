@@ -1,8 +1,12 @@
 use dotenv::dotenv;
 use std::env;
 
-mod event_handler;
+use serenity::framework::StandardFramework;
+
 mod commands;
+mod event_handler;
+
+use commands::info::*;
 
 #[tokio::main]
 async fn main() {
@@ -11,9 +15,13 @@ async fn main() {
 
     let token = env::var("TOKEN").expect("No token found");
 
+    let framework = StandardFramework::new()
+        .configure(|c| c.prefix("r!"))
+        .group(&INFO_GROUP);
+
     let mut client = serenity::Client::builder(token)
         .event_handler(event_handler::Handler)
-        .framework(commands::load_commands())
+        .framework(framework)
         .await
         .expect("Error creating client");
 
